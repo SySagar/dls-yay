@@ -46,6 +46,12 @@ jobs:
     - name: Publish Prerelease
       run: npx changeset publish
 
+    - name: Publish GitHub Release
+      if: steps.check_prerelease.outputs.PRERELEASE_STATUS == 'true'
+      run: |
+        PRERELEASE_VERSION=$(jq -r '.[0].release' .changeset/*.json)
+        gh release create "$PRERELEASE_VERSION" --title "Prerelease - $PRERELEASE_VERSION" --notes "$(cat .changeset/*.md)" --draft
+
     - name: Push Changes and Tags
       run: git push --follow-tags
     env:

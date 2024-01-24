@@ -1,8 +1,10 @@
 {
-  "mode": "pre",
+  "mode": "exit",
   "tag": "next",
   "initialVersions": {
     "mcl-sy": "0.0.7"
   },
-  "changesets": []
+  "changesets": [
+    "itchy-garlics-sort"
+  ]
 }

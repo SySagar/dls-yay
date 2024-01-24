@@ -1,6 +1,6 @@
 {
   "name": "mcl-sy",
-  "version": "0.0.7",
+  "version": "0.1.0-next.0",
   "type": "module",
   "main": "dist/mcl-sy.js",
   "types": "dist/index.d.ts",
@@ -15,7 +15,6 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    
     "prerelease": "npm run changeset-pre-enter && npm run changeset-version",
     "changeset-pre-enter": "npx changeset pre enter next",
     "changeset-version": "npx changeset version",

@@ -43,14 +43,20 @@ jobs:
           echo "Entered prerelease mode";
         fi
 
+    - name: get changeset version
+      id: get_changeset_version
+      run: |
+       CHANGELOG_VERSION=$(grep -oP '(?<=## )[0-9]+\.[0-9]+\.[0-9]+-\w+' CHANGELOG.md)
+       echo "::set-output name=CHANGESET_VERSION::$CHANGELOG_VERSION"
+
     - name: Publish Prerelease
       run: npx changeset publish
 
     - name: Publish GitHub Release
       if: steps.check_prerelease.outputs.PRERELEASE_STATUS == 'true'
       run: |
-        PRERELEASE_VERSION=$(jq -r '.[0].release' .changeset/*.json)
-        gh release create "$PRERELEASE_VERSION" --title "Prerelease - $PRERELEASE_VERSION" --notes "$(cat .changeset/*.md)" --draft
+        CHANGELOG_VERSION=$(echo "${{ steps.get_changeset_version.outputs.CHANGESET_VERSION }}")
+        gh release create "$CHANGELOG_VERSION" --title "Prerelease - $CHANGELOG_VERSION" --notes "$(cat .changeset/*.md)" --draft
 
     - name: Push Changes and Tags
       run: git push --follow-tags

@@ -62,3 +62,4 @@ jobs:
       run: git push --follow-tags
     env:
       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

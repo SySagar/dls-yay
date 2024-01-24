@@ -1,0 +1,8 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "mcl-sy": "0.0.7"
+  },
+  "changesets": []
+}

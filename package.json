@@ -14,7 +14,13 @@
     "lint:ts": "tsc",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    
+    "prerelease": "npm run changeset-pre-enter && npm run changeset-version",
+    "changeset-pre-enter": "npx changeset pre enter next",
+    "changeset-version": "npx changeset version",
+    "publish": "npx changeset publish",
+    "push-tags": "git push --follow-tags"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",

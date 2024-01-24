@@ -1,0 +1,45 @@
+name: Prerelease Workflow
+
+on:
+  push:
+    branches:
+      - ${{ github.ref }}
+
+jobs:
+  prerelease:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Print Branch Name
+      run: echo ${{ github.ref }}
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Check Prerelease Status
+      id: check_prerelease
+      run: echo "::set-output name=PRERELEASE_STATUS::$(if [ -d ".changeset" ]; then echo "true"; else echo "false"; fi)"
+
+    - name: Enter or Verify Prerelease Mode
+      run: |
+        if [ "${{ steps.check_prerelease.outputs.PRERELEASE_STATUS }}" == "true" ]; then
+          echo "Already in prerelease mode";
+        else
+          npx changeset pre enter next;
+          npx changeset version;
+          echo "Entered prerelease mode";
+        fi
+
+    - name: Publish Prerelease
+      run: npx changeset publish
+
+    - name: Push Changes and Tags
+      run: git push --follow-tags

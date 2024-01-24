@@ -1,0 +1,32 @@
+name: PR Approval Workflow
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up GitHub CLI
+        uses: actions/setup-gh@v0
+        with:
+          version: 2.2.1
+
+      - name: Check if PR is approved
+        id: pr_checks
+        run: echo "::set-output name=APPROVED::$(gh pr checks ${{ github.event.number }} --json status | jq -r '. == "success"')"
+
+      - name: Exit prerelease mode if PR is approved
+        if: steps.pr_checks.outputs.APPROVED == 'true'
+        run: yarn changeset pre exit

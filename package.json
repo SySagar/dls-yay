@@ -19,7 +19,7 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "release": "changeset release",
+    "release": "changeset publish",
     "preversion": "changeset pre",
     "version": "changeset version",
     "postversion": "changeset post"

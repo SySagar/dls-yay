@@ -31,11 +31,12 @@ jobs:
       - name: Check for Existing Tag
         id: check-existing-tag
         run: |
-          tag=$(git describe --tags --abbrev=0)
-          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
-            echo "Tag $tag already exists. Skipping tag creation."
+          tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$tag" ]; then
+            echo "No tags found. Skipping tag-related steps."
             exit 0
           fi
+          echo "Latest tag: $tag"
 
       - name: Check for Tags
         id: check-tags
@@ -68,9 +69,4 @@ jobs:
           body="### Changelog\n\n$changelog"
 
           echo "Creating GitHub Release..."
-          curl -X POST -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}" \
-            -d "{\"tag_name\":\"$tag\",\"name\":\"$tag\",\"body\":\"$body\",\"prerelease\":$prerelease}" \
-            "https://api.github.com/repos/${{ github.repository }}/releases"
-
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          curl -X POST -H "Authorization: Bearer $

@@ -32,8 +32,9 @@ jobs:
         id: check-tags
         run: |
           if [ -z "$(git tag -l)" ]; then
-            echo "No tags found. Skipping release step."
-            exit 0
+            echo "No tags found. Creating a new tag."
+            npm version patch -m "Bump version to %s"
+            git push --follow-tags
           fi
 
       - name: Create Release Pull Request or Publish to npm

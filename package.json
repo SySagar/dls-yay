@@ -1,9 +1,10 @@
 {
   "name": "mcl-sy",
-  "version": "0.1.0-next.0",
+  "version": "1.0.0-next.5",
   "type": "module",
   "main": "dist/mcl-sy.js",
   "types": "dist/index.d.ts",
+  "private": false,
   "files": [
     "dist"
   ],

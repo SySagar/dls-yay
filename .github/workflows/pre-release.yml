@@ -1,10 +1,9 @@
 name: Prerelease Workflow
 
 on:
-  push:
+  pull_request:
     branches:
-      - '*'
-      - '!main'
+      - main
 
 permissions:
   contents: write
@@ -15,51 +14,63 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Print Branch Name
-      run: echo ${{ github.ref }}
+      - name: Print Branch Name
+        run: echo ${{ github.event_name }} ${{ github.event.action }} ${{ github.ref }}
 
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Check Prerelease Status
-      id: check_prerelease
-      run: echo "::set-output name=PRERELEASE_STATUS::$(if [ -d ".changeset" ]; then echo "true"; else echo "false"; fi)"
+      - name: Check Prerelease Status
+        id: check_prerelease
+        run: echo "::set-output name=PRERELEASE_STATUS::$(if [ -d ".changeset" ]; then echo "true"; else echo "false"; fi)"
 
-    - name: Enter or Verify Prerelease Mode
-      run: |
-        if [ "${{ steps.check_prerelease.outputs.PRERELEASE_STATUS }}" == "true" ]; then
-          echo "Already in prerelease mode";
-        else
-          npx changeset pre enter next;
-          npx changeset version;
-          echo "Entered prerelease mode";
-        fi
+      - name: Enter or Verify Prerelease Mode
+        run: |
+          if [ "${{ steps.check_prerelease.outputs.PRERELEASE_STATUS }}" == "true" ]; then
+            echo "Already in prerelease mode";
+          else
+            npx changeset pre enter next;
+          fi
 
-    - name: get changeset version
-      id: get_changeset_version
-      run: |
-       CHANGELOG_VERSION=$(grep -oP '(?<=## )[0-9]+\.[0-9]+\.[0-9]+-\w+' CHANGELOG.md)
-       echo "::set-output name=CHANGESET_VERSION::$CHANGELOG_VERSION"
+      - name: Update Changeset Version
+        run: npx changeset version
 
-    - name: Publish Prerelease
-      run: npx changeset publish
+      - name: get changeset version
+        id: get_changeset_version
+        run: |
+          CHANGELOG_VERSION=$(grep -oP '(?<=## )[0-9]+\.[0-9]+\.[0-9]+-next\.[0-9]+' CHANGELOG.md)
+          echo "::set-output name=CHANGESET_VERSION::$CHANGELOG_VERSION"
 
-    - name: Publish GitHub Release
-      if: steps.check_prerelease.outputs.PRERELEASE_STATUS == 'true'
-      run: |
-        CHANGELOG_VERSION=$(echo "${{ steps.get_changeset_version.outputs.CHANGESET_VERSION }}")
-        gh release create "$CHANGELOG_VERSION" --title "Prerelease - $CHANGELOG_VERSION" --notes "$(cat .changeset/*.md)" --draft
+      - name: Publish Prerelease
+        run: npx changeset publish
 
-    - name: Push Changes and Tags
-      run: git push --follow-tags
-    env:
-      GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Build NPM package
+        run: npm run build  
+
+      - name: Publish NPM package
+        run: |
+          npm publish --tag next
+          echo "NPM package published as prerelease"
+
+      - name: Publish GitHub Release
+        if: steps.check_prerelease.outputs.PRERELEASE_STATUS == 'true'
+        run: |
+          CHANGELOG_VERSION=$(echo "${{ steps.get_changeset_version.outputs.CHANGESET_VERSION }}")
+          gh release create "$CHANGELOG_VERSION" --title "Prerelease - $CHANGELOG_VERSION" --notes "$(cat .changeset/*.md)" --draft
+
+      - name: Exit Prerelease Mode
+        run: npx changeset pre exit
+
+      - name: Push Changes and Tags
+        run: git push --follow-tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

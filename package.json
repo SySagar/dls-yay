@@ -22,7 +22,7 @@
     "prerelease": "npm run changeset-pre-enter && npm run changeset-version",
     "changeset-pre-enter": "npx changeset pre enter next",
     "changeset-version": "npx changeset version",
-    "release": "npm run build && npx changeset publish",
+    "release": "npm run build && npx changeset publish && npm run push-tags",
     "push-tags": "git push --follow-tags"
   },
   "dependencies": {

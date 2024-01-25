@@ -1,9 +1,10 @@
 name: Prerelease Workflow
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - '*'
+      - '!main'
 
 permissions:
   contents: write

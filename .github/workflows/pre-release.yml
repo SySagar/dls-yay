@@ -50,16 +50,17 @@ jobs:
           CHANGELOG_VERSION=$(grep -oP '(?<=## )[0-9]+\.[0-9]+\.[0-9]+-next\.[0-9]+' CHANGELOG.md)
           echo "::set-output name=CHANGESET_VERSION::$CHANGELOG_VERSION"
 
+      - name: Log in to npm
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+
       - name: Publish Prerelease
         run: npx changeset publish
 
       - name: Build NPM package
-        run: npm run build  
+        run: npm run build
 
       - name: Publish NPM package
-        run: |
-          npm publish --tag next
-          echo "NPM package published as prerelease"
+        run: npm publish --tag next
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 

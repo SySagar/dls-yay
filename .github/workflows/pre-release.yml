@@ -32,8 +32,22 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          # This expects you to have a script called release which does a build for your packages and calls changeset publish
           publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Update GitHub Release
+        run: |
+          tag=$(git describe --tags --abbrev=0)
+          changelog=$(cat CHANGELOG.md)
+          prerelease=true # Set to false for a regular release, true for a pre-release
+          body="### Changelog\n\n$changelog"
+
+          echo "Creating GitHub Release..."
+          curl -X POST -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}" \
+            -d "{\"tag_name\":\"$tag\",\"name\":\"$tag\",\"body\":\"$body\",\"prerelease\":$prerelease}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases"
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}

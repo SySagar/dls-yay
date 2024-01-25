@@ -60,6 +60,8 @@ jobs:
         run: |
           npm publish --tag next
           echo "NPM package published as prerelease"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish GitHub Release
         if: steps.check_prerelease.outputs.PRERELEASE_STATUS == 'true'

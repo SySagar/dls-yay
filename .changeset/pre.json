@@ -1,18 +1,8 @@
 {
   "mode": "pre",
-  "tag": "next",
+  "tag": "pr-120",
   "initialVersions": {
-    "mcl-sy": "0.1.0-next.0"
+    "mcl-sy": "1.0.0"
   },
-  "changesets": [
-    "big-seahorses-scream",
-    "bright-bats-sparkle",
-    "brown-kids-argue",
-    "itchy-garlics-sort",
-    "lemon-brooms-sing",
-    "real-windows-jam",
-    "shaggy-islands-tan",
-    "silent-lies-poke",
-    "soft-pears-wink"
-  ]
+  "changesets": []
 }

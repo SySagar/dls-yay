@@ -1,5 +1,5 @@
 {
-  "mode": "pre",
+  "mode": "exit",
   "tag": "pr-120",
   "initialVersions": {
     "mcl-sy": "1.0.0"

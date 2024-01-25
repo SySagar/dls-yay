@@ -28,6 +28,15 @@ jobs:
       - name: Install Dependencies
         run: npm install 
 
+      - name: Check for Existing Tag
+        id: check-existing-tag
+        run: |
+          tag=$(git describe --tags --abbrev=0)
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            echo "Tag $tag already exists. Skipping tag creation."
+            exit 0
+          fi
+
       - name: Check for Tags
         id: check-tags
         run: |

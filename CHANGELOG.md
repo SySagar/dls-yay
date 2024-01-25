@@ -1,5 +1,11 @@
 # mcl-sy
 
+## 1.0.0-next.6
+
+### Minor Changes
+
+- test component
+
 ## 1.0.0-next.5
 
 ### Patch Changes

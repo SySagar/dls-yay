@@ -28,12 +28,40 @@ jobs:
       - name: Install Dependencies
         run: npm install 
 
+      - name: Check for Tags
+        id: check-tags
+        run: |
+          if [ -z "$(git tag -l)" ]; then
+            echo "No tags found. Creating a new tag."
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor }}@users.noreply.github.com"
+            git add .
+            git commit -m "Committing changes before tagging"
+            npm version patch -m "Bump version to %s"
+            git push --follow-tags
+          fi
+
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
-          # This expects you to have a script called release which does a build for your packages and calls changeset publish
           publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Update GitHub Release
+        if: steps.check-tags.outputs.result == 'success'
+        run: |
+          tag=$(git describe --tags --abbrev=0)
+          changelog=$(cat CHANGELOG.md)
+          prerelease=true # Set to false for a regular release, true for a pre-release
+          body="### Changelog\n\n$changelog"
+
+          echo "Creating GitHub Release..."
+          curl -X POST -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}" \
+            -d "{\"tag_name\":\"$tag\",\"name\":\"$tag\",\"body\":\"$body\",\"prerelease\":$prerelease}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases"
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}

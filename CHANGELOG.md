@@ -1,25 +1,5 @@
 # mcl-sy
 
-## 1.0.0
-
-### Major Changes
-
-- 99e06e6: updating major
-
-### Minor Changes
-
-- 19d0c0f: test component
-- b6de7ce: test
-- 99e06e6: alert box
-- ba7f657: changed
-
-### Patch Changes
-
-- 99e06e6: testing another pathc
-- ba7f657: removed
-- 99e06e6: imported alertbox 2
-- 99e06e6: imported alertbox
-
 ## 1.0.0-next.6
 
 ### Minor Changes

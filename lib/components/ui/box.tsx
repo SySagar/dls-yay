@@ -1,7 +1,7 @@
 export  function box() {
   return (
     <div>
-      box
+      random text
     </div>
   )
 }

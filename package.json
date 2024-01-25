@@ -19,11 +19,10 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prerelease": "npm run changeset-pre-enter && npm run changeset-version",
-    "changeset-pre-enter": "npx changeset pre enter next",
-    "changeset-version": "npx changeset version",
-    "release": "npm run build && npx changeset publish && npm run push-tags",
-    "push-tags": "git push --follow-tags"
+    "release": "changeset release",
+    "preversion": "changeset pre",
+    "version": "changeset version",
+    "postversion": "changeset post"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",

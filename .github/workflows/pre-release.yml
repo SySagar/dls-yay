@@ -28,6 +28,14 @@ jobs:
       - name: Install Dependencies
         run: npm install 
 
+      - name: Check for Tags
+        id: check-tags
+        run: |
+          if [ -z "$(git tag -l)" ]; then
+            echo "No tags found. Skipping release step."
+            exit 0
+          fi
+
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
@@ -38,6 +46,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Update GitHub Release
+        if: steps.check-tags.outputs.result == 'success'
         run: |
           tag=$(git describe --tags --abbrev=0)
           changelog=$(cat CHANGELOG.md)

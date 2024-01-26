@@ -2,9 +2,10 @@ name: Prerelease Workflow
 
 on:
   push:
-    branches-ignore:
-      - main
-      - releases-2
+    branches:
+      - **
+      - "!main"
+      - "!releases-2"
 
 permissions:
   contents: write

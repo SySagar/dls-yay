@@ -35,15 +35,13 @@ jobs:
             npx changeset pre enter beta;
           fi
       - name: Version packages
-        run: npx changeset version
-      - run: git add .
-      - run: git commit -m "Enter prerelease mode and version packages"
+        run: npx changeset version --snapshot ${GITHUB_REF##*/}
       - name: Publish packages
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npx changeset publish
+          npx changeset publish --tag ${GITHUB_REF##*/}
           git push --follow-tags
       - name: Exit prerelease mode
         run: npx changeset pre exit

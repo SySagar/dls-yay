@@ -1,5 +1,11 @@
 # mcl-sy
 
+## 0.2.0-beta.0
+
+### Minor Changes
+
+- ec013a3: alertbox
+
 ## 0.1.0
 
 ### Minor Changes

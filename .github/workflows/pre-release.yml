@@ -1,0 +1,37 @@
+name: Prerelease Workflow
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - releases-2
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prerelease:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+          cache: "npm"
+      - run: npm install
+      - name: Enter prerelease mode
+        run: npx changeset pre enter beta
+      - name: Version packages
+        run: npx changeset version
+      - run: git add .
+      - run: git commit -m "Enter prerelease mode and version packages"
+      - name: Publish packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npx changeset publish
+          git push --follow-tags
+      - name: Exit prerelease mode
+        run: npx changeset pre exit

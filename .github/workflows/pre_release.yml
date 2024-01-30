@@ -26,14 +26,12 @@ jobs:
           git config --global user.name "SySagar"
       - name: Set up npm authentication
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-
-      - uses: nelonoel/branch-name@v1.0.1
-         # Use branch name for whatever purpose
-      - run: echo ${{github.ref_name}}
-      - run: echo ${{github.head_ref}}
+      
+      # - run: echo ${{github.ref_name}}
+      # - run: echo ${{github.head_ref}}
       
       - name: Version packages
-        run: npx changeset version --snapshot ${GITHUB_REF##*/}
+        run: npx changeset version --snapshot ${{github.head_ref || github.ref_name}}
       - name: Publish packages
         id: publish
         env:
@@ -42,7 +40,7 @@ jobs:
         run: |
           npx changeset publish --tag ${GITHUB_REF##*/}
           echo "VERSION=$(npx changeset latest)" >> $GITHUB_ENV
-          git push --follow-tags origin ${GITHUB_REF##*/}
+          git push --follow-tags origin ${{github.head_ref || github.ref_name}}
 
       - name: Comment PR with NPM package version
         uses: thollander/actions-comment-pull-request@v2

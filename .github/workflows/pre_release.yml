@@ -47,6 +47,7 @@ jobs:
           message: |
             Hello world! :wave:
 
-            The NPM package has been published with version: ${{ env.VERSION }}
+            The following packages have been published to NPM:
+            - @sysagar/monorepo-test-package: ${{ steps.publish.outputs.version }}
         env:
           VERSION: ${{ steps.publish.outputs.version }}

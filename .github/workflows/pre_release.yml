@@ -39,8 +39,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npx changeset publish --tag ${{github.head_ref || github.ref_name}}
-          echo "VERSION=$(npx changeset latest)" >> $GITHUB_ENV
-          git push --follow-tags origin ${{github.head_ref || github.ref_name}}
+          echo "::set-output name=version::$(npx changeset version --summary)"
 
       - name: Comment PR with NPM package version
         uses: thollander/actions-comment-pull-request@v2

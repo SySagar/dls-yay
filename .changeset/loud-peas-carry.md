@@ -2,4 +2,4 @@
 "mcl-sy": patch
 ---
 
-intial setup
+testing custom action

@@ -26,6 +26,9 @@ jobs:
           git config --global user.name "SySagar"
       - name: Set up npm authentication
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      - name: Echo GITHUB_REF
+        run: echo $GITHUB_REF
       
       - name: Version packages
         run: npx changeset version --snapshot ${GITHUB_REF##*/}

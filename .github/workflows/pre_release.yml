@@ -1,0 +1,54 @@
+name: Prerelease Workflow
+
+on:
+  pull_request:
+    branches:
+      - '*'
+      - '!main'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prerelease:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+          cache: "npm"
+      - run: npm install
+      - name: Configure Git
+        run: |
+          git config --global user.email "sysagar07@gmail.com"
+          git config --global user.name "SySagar"
+      - name: Set up npm authentication
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      
+      # - run: echo ${{github.ref_name}}
+      # - run: echo ${{github.head_ref}}
+      
+      - name: Version packages
+        run: npx changeset version --snapshot ${{github.head_ref || github.ref_name}}
+      - name: Publish packages
+        id: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npx changeset publish --tag ${{github.head_ref || github.ref_name}}
+          echo "::set-output name=version::$(npx changeset version --summary)"
+          git push --follow-tags
+
+      - name: Comment PR with NPM package version
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Hello world! :wave:
+
+            The following packages have been published to NPM:
+            - @sysagar/monorepo-test-package: ${{ steps.publish.outputs.version }}
+        env:
+          VERSION: ${{ steps.publish.outputs.version }}

@@ -4,8 +4,6 @@ on:
   pull_request:
     paths:
       - 'test_**'
-    branches:
-      - releases-2
 
 permissions:
   contents: write

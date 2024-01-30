@@ -1,5 +1,16 @@
 # mcl-sy
 
+## 0.2.0
+
+### Minor Changes
+
+- ec013a3: alertbox
+
+### Patch Changes
+
+- de3e0aa: testing custom action
+- 8285ade: hehe
+
 ## 0.2.0-beta.0
 
 ### Minor Changes

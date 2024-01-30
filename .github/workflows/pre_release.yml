@@ -29,7 +29,7 @@ jobs:
 
       - uses: nelonoel/branch-name@v1.0.1
          # Use branch name for whatever purpose
-      - run: echo ${BRANCH_NAME}
+      - run: echo ${github.ref_name}
       
       - name: Version packages
         run: npx changeset version --snapshot ${GITHUB_REF##*/}

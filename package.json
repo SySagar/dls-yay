@@ -1,9 +1,12 @@
 {
   "name": "mcl-sy",
-  "version": "0.0.7",
+  "version": "0.2.0-beta.0",
   "type": "module",
   "main": "dist/mcl-sy.js",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist"
   ],
@@ -14,7 +17,8 @@
     "lint:ts": "tsc",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "release": "changeset publish"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",

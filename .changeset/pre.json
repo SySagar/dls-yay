@@ -1,0 +1,10 @@
+{
+  "mode": "exit",
+  "tag": "beta",
+  "initialVersions": {
+    "mcl-sy": "0.1.0"
+  },
+  "changesets": [
+    "dirty-flowers-report"
+  ]
+}

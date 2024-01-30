@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npx changeset publish --tag ${GITHUB_REF##*/}
+          npx changeset publish --tag ${{github.head_ref || github.ref_name}}
           echo "VERSION=$(npx changeset latest)" >> $GITHUB_ENV
           git push --follow-tags origin ${{github.head_ref || github.ref_name}}
 

@@ -1,8 +1,11 @@
 name: Prerelease Workflow
 
 on:
-  push:
-   branches: ['test_*', '!main', '!releases-2']
+  pull_request:
+    paths:
+      - 'test_**'
+    branches:
+      - releases-2
 
 permissions:
   contents: write
@@ -28,9 +31,21 @@ jobs:
       - name: Version packages
         run: npx changeset version --snapshot ${GITHUB_REF##*/}
       - name: Publish packages
+        id: publish
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npx changeset publish --tag ${GITHUB_REF##*/}
+          echo "VERSION=$(npx changeset latest)" >> $GITHUB_ENV
           git push --follow-tags origin ${GITHUB_REF##*/}
+
+      - name: Comment PR with NPM package version
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Hello world! :wave:
+
+            The NPM package has been published with version: ${{ env.VERSION }}
+        env:
+          VERSION: ${{ steps.publish.outputs.version }}

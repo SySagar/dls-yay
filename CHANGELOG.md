@@ -1,5 +1,18 @@
 # mcl-sy
 
+## 1.3.0
+
+### Minor Changes
+
+- ec013a3: alertbox
+- be089fa: minor
+
+### Patch Changes
+
+- ea21be1: test
+- 0f68b05: 1
+- 7ff7daf: 11
+
 ## 1.2.1-test.0
 
 ### Patch Changes

@@ -32,8 +32,6 @@ jobs:
         run: echo ${{github.head_ref || github.ref_name}}
       - name: Version packages
         run: npx changeset version
-      - run: git add .
-      - run: git commit -m "Enter prerelease mode and version packages"
       - name: Publish packages
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}

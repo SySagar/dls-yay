@@ -1,0 +1,11 @@
+{
+  "mode": "exit",
+  "tag": "test",
+  "initialVersions": {
+    "mcl-sy": "1.2.1-test.0"
+  },
+  "changesets": [
+    "dirty-flowers-report",
+    "shaggy-experts-guess"
+  ]
+}

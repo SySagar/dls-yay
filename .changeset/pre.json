@@ -2,9 +2,10 @@
   "mode": "exit",
   "tag": "test",
   "initialVersions": {
-    "mcl-sy": "0.2.0-beta.0"
+    "mcl-sy": "1.2.0"
   },
   "changesets": [
-    "dirty-flowers-report"
+    "dirty-flowers-report",
+    "shaggy-experts-guess"
   ]
 }

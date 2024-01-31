@@ -1,5 +1,11 @@
 # mcl-sy
 
+## 1.2.1-test.0
+
+### Patch Changes
+
+- 1
+
 ## 0.2.0-beta.0
 
 ### Minor Changes

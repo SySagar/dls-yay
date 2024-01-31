@@ -1,8 +1,10 @@
 name: Prerelease Workflow
 
 on:
-  push:
-   branches: ['*', '!main', '!releases-2']
+  pull_request:
+    branches:
+      - '*'
+      - '!main'
 
 permissions:
   contents: write
@@ -32,7 +34,7 @@ jobs:
           if [ "${{ steps.check_prerelease.outputs.PRERELEASE_STATUS }}" == "true" ]; then
             echo "Already in prerelease mode";
           else
-            npx changeset pre enter beta;
+            npx changeset pre enter ${{github.head_ref || github.ref_name}};
           fi
       - name: Version packages
         run: npx changeset version
@@ -43,7 +45,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npx changeset publish
+          npx changeset publish --tag ${{github.head_ref || github.ref_name}}
+          echo "::set-output name=version::$(npx changeset version --summary)"
           git push --follow-tags
       - name: Exit prerelease mode
         run: npx changeset pre exit
+
+      - name: Comment PR with NPM package version
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Hello world! :wave:
+
+            The following packages have been published to NPM:
+            - @sysagar/monorepo-test-package: ${{ steps.publish.outputs.version }}
+        env:
+          VERSION: ${{ steps.publish.outputs.version }}

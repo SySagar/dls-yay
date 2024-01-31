@@ -1,8 +1,7 @@
 export function AlertBox() {
   return (
     <div>
-      alert box some more chanegs
-      additonal change
+      <h1>AlertBox</h1>
     </div>
   )
 }

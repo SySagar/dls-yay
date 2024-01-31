@@ -33,6 +33,7 @@ jobs:
         run: |
           if [ "${{ steps.check_prerelease.outputs.PRERELEASE_STATUS }}" == "true" ]; then
             echo "Already in prerelease mode";
+            npx changeset pre exit
           else
             npx changeset pre enter ${{github.head_ref || github.ref_name}};
           fi

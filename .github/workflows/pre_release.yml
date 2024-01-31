@@ -36,6 +36,8 @@ jobs:
           else
             npx changeset pre enter ${{github.head_ref || github.ref_name}};
           fi
+      - name: Echo branch or tag name
+        run: echo ${{github.head_ref || github.ref_name}}
       - name: Version packages
         run: npx changeset version
       - run: git add .

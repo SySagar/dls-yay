@@ -47,7 +47,6 @@ jobs:
         run: |
           npx changeset publish
           echo "::set-output name=version::$(npx changeset version --summary)"
-          git push --follow-tags
       - name: Exit prerelease mode
         run: npx changeset pre exit
 

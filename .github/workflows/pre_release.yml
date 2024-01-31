@@ -26,17 +26,8 @@ jobs:
           git config --global user.name "SySagar"
       - name: Set up npm authentication
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-      - name: Check Prerelease Status
-        id: check_prerelease
-        run: echo "::set-output name=PRERELEASE_STATUS::$(if [ -d ".changeset" ]; then echo "true"; else echo "false"; fi)"
       - name: Enter prerelease mode
-        run: |
-          if [ "${{ steps.check_prerelease.outputs.PRERELEASE_STATUS }}" == "true" ]; then
-            echo "Already in prerelease mode";
-            npx changeset pre exit
-          else
-            npx changeset pre enter ${{github.head_ref || github.ref_name}};
-          fi
+        run: npx changeset pre enter ${{github.head_ref || github.ref_name}};
       - name: Echo branch or tag name
         run: echo ${{github.head_ref || github.ref_name}}
       - name: Version packages
